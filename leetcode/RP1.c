@@ -35,4 +35,5 @@ int dele(int* num, int size){
     }
     printf("%d \n", x);
     return x;
+
 }

@@ -145,14 +145,19 @@
 
 //快樂數字
 int main(){
-    int n = 19;
+    // int n = 19;
 
-    int d = 0,v = 0;
-    while (n != 0){
-        v = n % 10;
-        n /= 10;
-        d += v*v;
-    }
-    printf("%d \n", d);
+    // int d = 0,v = 0;
+    // while (n != 0){
+    //     v = n % 10;
+    //     n /= 10;
+    //     d += v*v;
+    // }
+    // printf("%d \n", d);
+    int numsSize = 10;
+    int returnN0ums = (int) malloc( 1 * numsSize);
+    printf("%d",sizeof(returnN0ums));
+    
     return 0;
+
 }
