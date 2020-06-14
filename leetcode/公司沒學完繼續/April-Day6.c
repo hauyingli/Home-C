@@ -209,98 +209,158 @@
 // //寫一個結構
 // //把qsort 後的字串再重新編排一次(把一樣的排在一起)
 
+// typedef struct {
+//     char *origninal; //原始字串
+//     char *sorted;    //排完續的字串
+// }Pair;
+// int cmpChar(const void* a, const void* b){  // qsort排序的函式
+//     // printf("%d \n", *(const char*)a - *(const char*)b);
+//     return *(const char*)a - *(const char*)b;
+// }
+// int cmpPair (const void* a, const void* b){
+//     const Pair* pa = (const Pair*)a;
+//     const Pair* pb = (const Pair*)b;
+//     return strcmp(pa->sorted,pb->sorted);
+// }
+
+
+// char *** groupAnagrams(char ** strs, int strsSize, int* returnSize, int** returnColumnSizes){
+//     //第一個參數 strs : ["eat", "tea", "tan", "ate", "nat", "bat"]
+//     //為啥是字元＊＊呢？
+//     //第一個＊代表strs是一個陣列(*),陣列中每個元素都是一個字串（char＊）  
+//     // ================== 
+//     //結構開始使用
+//     Pair* pairs = malloc(sizeof(Pair)*strsSize);
+//     //這邊產生陣列
+//     //pairs : [{origninal: "eat" , sorted: "aet"},{origninal: "tea" , sorted: "aet"},....]共有6個
+
+//     //      把文字排序用 ===> qsort 函式 
+//     for (int i = 0; i < strsSize; i++){
+//         char *sorted_str = malloc(sizeof(char)*strlen(strs[i])+1);
+//         strcpy(sorted_str,strs[i]);
+//         qsort(sorted_str,strlen(strs[i]),sizeof(char),cmpChar);
+//         //儲存 pairs內的值:
+//         pairs[i].origninal = strs[i];
+//         pairs[i].sorted = sorted_str;        
+//     }
+
+//     //重新編排 Pairs
+//     //qsort(重新編排的內容, 總共有多少個, 一個有多大,)
+//     qsort(pairs,strsSize,sizeof(Pair),cmpPair);
+//     /*
+//     orignina:sorted
+//     ----------------
+//         bat : abt
+//         tea : aet
+//         ate : aet
+//         eat : aet
+//         nat : ant
+//         tan : ant
+//     */ 
+//     char ***returnResult = NULL;//[]一開始要一個空的
+//     *returnSize = 0;
+//     *returnColumnSizes = NULL;
+//     // returnResult : [], *returnSize : 0, *returnColumnSizes : [];
+   
+//     //第一個字  case 1
+//     returnResult = malloc(sizeof(char**)*1);
+//     returnResult[0] = malloc(sizeof(char*)*1);
+//     returnResult[0][0] = pairs[0].origninal;
+    
+//     *returnSize = 1;
+//     *returnColumnSizes = malloc(sizeof(int)*1);
+//     (*returnColumnSizes)[0] = 1;
+//     // returnResult : [["bat"]], retuenSize : 1, returnColumsSizes:[1]
+//     //第二個字   case 1
+//     returnResult = realloc(returnResult,sizeof(char**)*2);
+//     //returnResult : [["bat"],["eat"]];
+//     returnResult[1] = malloc(sizeof(char*)*1);
+//     returnResult[1][0] = pairs[1].origninal;
+    
+//     *returnSize = 2;
+//     *returnColumnSizes = realloc(*returnColumnSizes,sizeof(int)*2);
+//     (*returnColumnSizes)[1] = 1;
+//     // returnResult : [["bat"]], retuenSize : 1, returnColumsSizes:[1]
+    
+//     //第三個字  case 2
+//     returnResult[1] = realloc(returnResult[1],sizeof(char*)*2);
+//     returnResult[1][1] = pairs[2].origninal;
+
+//     (*returnColumnSizes)[1] = 2;
+//     printf("test");
+//     for (int i = 0; i < 6; i++){
+//         printf("%s : %s \n",pairs[i].origninal,pairs[i].sorted);
+//     }
+//     printf("test");
+//     return returnResult;
+// }
+
+
+
+
+//最終版
 typedef struct {
-    char *origninal; //原始字串
+    char *original; //原始字串
     char *sorted;    //排完續的字串
 }Pair;
+
 int cmpChar(const void* a, const void* b){  // qsort排序的函式
-    // printf("%d \n", *(const char*)a - *(const char*)b);
     return *(const char*)a - *(const char*)b;
 }
+
 int cmpPair (const void* a, const void* b){
     const Pair* pa = (const Pair*)a;
     const Pair* pb = (const Pair*)b;
     return strcmp(pa->sorted,pb->sorted);
 }
 
-
 char *** groupAnagrams(char ** strs, int strsSize, int* returnSize, int** returnColumnSizes){
-    //第一個參數 strs : ["eat", "tea", "tan", "ate", "nat", "bat"]
-    //為啥是字元＊＊呢？
-    //第一個＊代表strs是一個陣列(*),陣列中每個元素都是一個字串（char＊）  
-    // ================== 
-    //結構開始使用
     Pair* pairs = malloc(sizeof(Pair)*strsSize);
-    //這邊產生陣列
-    //pairs : [{origninal: "eat" , sorted: "aet"},{origninal: "tea" , sorted: "aet"},....]共有6個
 
-    //      把文字排序用 ===> qsort 函式 
     for (int i = 0; i < strsSize; i++){
-        char *sorted_str = malloc(sizeof(char)*strlen(strs[i])+1);
+        char *sorted_str = malloc(sizeof(char)*(strlen(strs[i])+1));
         strcpy(sorted_str,strs[i]);
         qsort(sorted_str,strlen(strs[i]),sizeof(char),cmpChar);
-        //儲存 pairs內的值:
-        pairs[i].origninal = strs[i];
+        pairs[i].original = strs[i];
         pairs[i].sorted = sorted_str;        
     }
 
-    //重新編排 Pairs
-    //qsort(重新編排的內容, 總共有多少個, 一個有多大,)
     qsort(pairs,strsSize,sizeof(Pair),cmpPair);
-    /*
-    orignina:sorted
-    ----------------
-        bat : abt
-        tea : aet
-        ate : aet
-        eat : aet
-        nat : ant
-        tan : ant
-    */ 
+    
     char ***returnResult = NULL;//[]一開始要一個空的
     *returnSize = 0;
     *returnColumnSizes = NULL;
-    // returnResult : [], *returnSize : 0, *returnColumnSizes : [];
-   
-    //第一個字  case 1
-    returnResult = malloc(sizeof(char**)*1);
-    returnResult[0] = malloc(sizeof(char*)*1);
-    returnResult[0][0] = pairs[0].origninal;
-    
-    *returnSize = 1;
-    *returnColumnSizes = malloc(sizeof(int)*1);
-    (*returnColumnSizes)[0] = 1;
-    // returnResult : [["bat"]], retuenSize : 1, returnColumsSizes:[1]
-    //第二個字   case 1
-    returnResult = realloc(returnResult,sizeof(char**)*2);
-    //returnResult : [["bat"],["eat"]];
-    returnResult[1] = malloc(sizeof(char*)*1);
-    returnResult[1][0] = pairs[1].origninal;
-    
-    *returnSize = 2;
-    *returnColumnSizes = realloc(*returnColumnSizes,sizeof(int)*2);
-    (*returnColumnSizes)[1] = 1;
-    // returnResult : [["bat"]], retuenSize : 1, returnColumsSizes:[1]
-    
-    //第三個字  case 2
-    returnResult[1] = realloc(returnResult[1],sizeof(char*)*2);
-    returnResult[1][1] = pairs[2].origninal;
+    for(int i = 0; i<strsSize; i++){
 
-    (*returnColumnSizes)[1] = 2;
-    
-    for (int i = 0; i < strsSize; i++){
-        printf("%s : %s \n",pairs[i].origninal,pairs[i].sorted);
-    }
-    
+        if(i == 0 || strcmp(pairs[i].sorted , pairs[i-1].sorted) != 0)
+        {
+            //第一個字  case 1
+            int lastGroupIndex = *returnSize;
+            returnResult = realloc(returnResult, sizeof(char**)*(*returnSize+1));
+            returnResult[lastGroupIndex] = malloc(sizeof(char*)*1);
+            returnResult[lastGroupIndex][0] = pairs[i].original;
+            
+            (*returnSize)++;
+            *returnColumnSizes = realloc(*returnColumnSizes,sizeof(int)*(*returnSize));
+            (*returnColumnSizes)[lastGroupIndex] = 1;
+        }
+        else{
+            //第三個字  case 2
+            int lastGroupIndex = *returnSize -1;
+            int lastGroupSize = (*returnColumnSizes)[lastGroupIndex];
+            returnResult[lastGroupIndex] = realloc(returnResult[lastGroupIndex],sizeof(char*)*(lastGroupSize+1));
+            returnResult[lastGroupIndex][lastGroupSize] = pairs[i].original;
+            (*returnColumnSizes)[lastGroupIndex] = lastGroupSize+1;
+        }
+    }   
     return returnResult;
 }
-
 int main(void){
     char* strs[6] = {"eat", "tea", "tan", "ate", "nat", "bat"};
     int strsSize = 6;
     int* returnSize =  0;
     int* returnColumnSizes[3] = {0,0,0};
-    
+
     groupAnagrams(strs,strsSize,returnSize,returnColumnSizes);
     return 0;
 }
